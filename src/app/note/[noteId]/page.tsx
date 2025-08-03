@@ -1,6 +1,6 @@
 import { getNote } from '@/services/note-service';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { Heart, Github, Twitter, Linkedin } from 'lucide-react';
+import { Heart } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 
@@ -8,7 +8,7 @@ export default async function SharedNotePage({ params }: { params: { noteId: str
   const note = await getNote(params.noteId);
 
   return (
-    <div className="flex flex-col min-h-dvh w-full bg-gradient-to-br from-primary/20 via-background to-background p-4 font-body">
+    <div className="flex flex-col flex-1 w-full bg-gradient-to-br from-primary/20 via-background to-background p-4 font-body">
       <main className="flex-1 flex w-full items-center justify-center">
         <Card className="w-full max-w-2xl text-center shadow-2xl bg-card/80 backdrop-blur-sm">
           <CardHeader>
@@ -31,14 +31,6 @@ export default async function SharedNotePage({ params }: { params: { noteId: str
           </CardContent>
         </Card>
       </main>
-      <footer className="w-full text-center py-4 mt-8">
-        <p className="text-muted-foreground font-headline text-lg">Created with ❤️ by Your Name</p>
-        <div className="flex justify-center gap-4 mt-2">
-            <Link href="#" className="text-muted-foreground hover:text-foreground transition-colors"><Github size={20}/></Link>
-            <Link href="#" className="text-muted-foreground hover:text-foreground transition-colors"><Twitter size={20}/></Link>
-            <Link href="#" className="text-muted-foreground hover:text-foreground transition-colors"><Linkedin size={20}/></Link>
-        </div>
-      </footer>
     </div>
   );
 }

@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import './globals.css';
 import { Toaster } from '@/components/ui/toaster';
 import { cn } from '@/lib/utils';
+import { Footer } from '@/components/footer';
 
 export const metadata: Metadata = {
   title: 'Friendship Note',
@@ -20,8 +21,11 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link href="https://fonts.googleapis.com/css2?family=Alegreya:ital,wght@0,400..900;1,400..900&family=Belleza&display=swap" rel="stylesheet" />
       </head>
-      <body className={cn('antialiased font-body')}>
-        {children}
+      <body className={cn('antialiased font-body flex flex-col min-h-dvh')}>
+        <div className="flex-1 flex flex-col">
+            {children}
+        </div>
+        <Footer />
         <Toaster />
       </body>
     </html>
