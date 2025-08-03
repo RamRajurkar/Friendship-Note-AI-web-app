@@ -84,18 +84,27 @@ export function FriendshipFinalePage() {
   }
   
   const handleCopyToClipboard = (textToCopy: string) => {
-    navigator.clipboard.writeText(textToCopy).then(() => {
+    const textArea = document.createElement("textarea");
+    textArea.value = textToCopy;
+    textArea.style.position = "fixed"; 
+    textArea.style.left = "-9999px";
+    document.body.appendChild(textArea);
+    textArea.focus();
+    textArea.select();
+    try {
+        document.execCommand('copy');
         toast({
             title: 'Copied!',
             description: 'The content has been copied to your clipboard.',
         });
-    }).catch(() => {
+    } catch (err) {
         toast({
             variant: 'destructive',
             title: 'Copy Failed',
             description: 'Could not copy to clipboard. Please copy it manually.',
         });
-    });
+    }
+    document.body.removeChild(textArea);
   }
   
   const handleShare = () => {
@@ -352,5 +361,3 @@ export function FriendshipFinalePage() {
       return renderIntro();
   }
 }
-
-    
