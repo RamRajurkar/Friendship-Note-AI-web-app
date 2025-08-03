@@ -118,7 +118,7 @@ export function FriendshipFinalePage() {
   const renderIntro = () => (
     <Card className="w-full max-w-lg text-center animate-in fade-in-50 duration-500">
       <CardHeader>
-        <CardTitle className="font-headline text-5xl tracking-wide">Friendship Finale</CardTitle>
+        <CardTitle className="font-headline text-5xl tracking-wide">Friendship Note</CardTitle>
         <CardDescription className="font-body text-base pt-2">
           Craft a beautiful, AI-powered note for your friend to celebrate your unique bond.
         </CardDescription>

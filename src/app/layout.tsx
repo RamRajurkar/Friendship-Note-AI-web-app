@@ -4,7 +4,7 @@ import { Toaster } from '@/components/ui/toaster';
 import { cn } from '@/lib/utils';
 
 export const metadata: Metadata = {
-  title: 'Friendship Finale',
+  title: 'Friendship Note',
   description: 'Create a special note for a special friend.',
 };
 
