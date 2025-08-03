@@ -30,6 +30,7 @@ export function FriendshipFinalePage() {
   const [step, setStep] = useState<Step>('intro');
   const [note, setNote] = useState('');
   const [generationData, setGenerationData] = useState<GenerationValues | null>(null);
+  const [personalTouches, setPersonalTouches] = useState('');
   const [isPending, startTransition] = useTransition();
   const { toast } = useToast();
 
@@ -60,7 +61,7 @@ export function FriendshipFinalePage() {
     });
   };
   
-  const handleCustomize = (personalTouches: string) => {
+  const handleCustomize = () => {
     if (!note) return;
     startTransition(async () => {
         const result = await customizeNoteAction({ initialNote: note, personalTouches });
@@ -87,6 +88,7 @@ export function FriendshipFinalePage() {
 
   const handleStartOver = () => {
     setNote('');
+    setPersonalTouches('');
     setGenerationData(null);
     form.reset();
     setStep('intro');
@@ -187,7 +189,6 @@ export function FriendshipFinalePage() {
   );
   
   const renderCustomize = () => {
-    const [personalTouches, setPersonalTouches] = useState('');
     return (
     <Card className="w-full max-w-lg animate-in fade-in-50 duration-500">
       <CardHeader>
@@ -206,7 +207,7 @@ export function FriendshipFinalePage() {
         />
       </CardContent>
       <CardFooter className="flex flex-col sm:flex-row gap-2">
-        <Button onClick={() => handleCustomize(personalTouches)} className="w-full sm:w-auto group" disabled={isPending || !personalTouches}>
+        <Button onClick={handleCustomize} className="w-full sm:w-auto group" disabled={isPending || !personalTouches}>
             {isPending ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Pencil className="mr-2 h-4 w-4 transition-transform group-hover:rotate-[-12deg]" />}
             Make it More Personal
         </Button>
