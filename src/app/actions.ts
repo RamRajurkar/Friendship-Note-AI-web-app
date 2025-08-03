@@ -4,6 +4,7 @@
 import { z } from 'zod';
 import { generateFriendshipNote } from '@/ai/flows/generate-friendship-note';
 import { customizeFriendshipNote } from '@/ai/flows/customize-friendship-note';
+import { saveNote as saveNoteService } from '@/services/note-service';
 
 const generateNoteSchema = z.object({
   sharedMemory: z.string().min(10, 'Please share a more detailed memory.'),
@@ -44,5 +45,22 @@ export async function customizeNoteAction(values: z.infer<typeof customizeNoteSc
     return { success: true, note: result.customizedNote };
   } catch(e) {
     return { error: 'Failed to customize note. Please try again.' };
+  }
+}
+
+const saveNoteSchema = z.object({
+  note: z.string().min(1, 'The note cannot be empty.'),
+});
+
+export async function saveNoteAction(values: z.infer<typeof saveNoteSchema>) {
+  const validatedFields = saveNoteSchema.safeParse(values);
+  if(!validatedFields.success) {
+    return { error: 'Invalid note content.' };
+  }
+  try {
+    const noteId = await saveNoteService(validatedFields.data.note);
+    return { success: true, noteId };
+  } catch(e) {
+    return { error: 'Failed to save the note. Please try again.' };
   }
 }

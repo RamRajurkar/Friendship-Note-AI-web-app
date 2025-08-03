@@ -11,7 +11,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Checkbox } from '@/components/ui/checkbox';
 import { useToast } from '@/hooks/use-toast';
-import { generateNoteAction, customizeNoteAction } from '@/app/actions';
+import { generateNoteAction, customizeNoteAction, saveNoteAction } from '@/app/actions';
 import { Confetti } from '@/components/confetti';
 import { Heart, Loader2, Wand2, Copy, RefreshCw, Pencil, Send } from 'lucide-react';
 
@@ -82,7 +82,27 @@ export function FriendshipFinalePage() {
     navigator.clipboard.writeText(note);
     toast({
         title: 'Note Copied!',
-        description: 'Your heartfelt note is ready to be pasted and shared.',
+        description: 'Your heartfelt note is ready to be pasted.',
+    });
+  }
+  
+  const handleShare = () => {
+    startTransition(async () => {
+      const result = await saveNoteAction({note});
+      if(result.success && result.noteId) {
+        const shareUrl = `${window.location.origin}/note/${result.noteId}`;
+        navigator.clipboard.writeText(shareUrl);
+        toast({
+            title: 'Link Copied!',
+            description: 'Your shareable note link is copied to the clipboard.',
+        });
+      } else {
+         toast({
+            variant: 'destructive',
+            title: 'Sharing Failed',
+            description: result.error || 'Could not create a shareable link. Please try again.',
+        });
+      }
     });
   }
 
@@ -236,8 +256,9 @@ export function FriendshipFinalePage() {
                  <Button size="lg" className="flex-1 group" onClick={handleCopyToClipboard}>
                     <Copy className="mr-2 h-5 w-5 transition-transform group-hover:scale-110"/> Copy to Clipboard
                  </Button>
-                 <Button size="lg" variant="accent" className="flex-1 group">
-                    <Send className="mr-2 h-5 w-5 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1"/> Share
+                 <Button size="lg" variant="accent" className="flex-1 group" onClick={handleShare} disabled={isPending}>
+                    {isPending ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Send className="mr-2 h-5 w-5 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1"/>}
+                     Share
                  </Button>
              </div>
              <div className="flex gap-2">
