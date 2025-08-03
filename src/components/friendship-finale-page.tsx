@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage, FormDescription } from '@/components/ui/form';
 import { Checkbox } from '@/components/ui/checkbox';
 import { useToast } from '@/hooks/use-toast';
 import { generateNoteAction, customizeNoteAction, saveNoteAction } from '@/app/actions';
@@ -173,9 +173,9 @@ export function FriendshipFinalePage() {
               name="sharedMemory"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>A Shared Memory</FormLabel>
+                  <FormLabel>What's the occasion?</FormLabel>
                   <FormControl>
-                    <Textarea placeholder="That time we went to the beach and..." className="min-h-[100px]" {...field} />
+                    <Textarea placeholder="Describe the occasion (e.g., a shared memory, a birthday wish, Friendship Day, etc.)" className="min-h-[100px]" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

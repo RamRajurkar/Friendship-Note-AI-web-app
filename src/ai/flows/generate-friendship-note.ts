@@ -14,7 +14,7 @@ import {z} from 'genkit';
 const GenerateFriendshipNoteInputSchema = z.object({
   sharedMemory: z
     .string()
-    .describe('A shared memory or experience with the recipient.'),
+    .describe('A shared memory, occasion, or experience with the recipient (e.g., birthday, Friendship Day).'),
   recipientName: z.string().describe('The name of the recipient.'),
   userName: z.string().describe('Your name.'),
   includeInsideJoke: z.boolean().describe('Whether to include an inside joke.'),
@@ -54,10 +54,10 @@ const prompt = ai.definePrompt({
   Compose a friendship note based on the following information:
   - Recipient Name: {{{recipientName}}}
   - Your Name: {{{userName}}}
-  - Shared Memory: {{{sharedMemory}}}
+  - Occasion/Memory: {{{sharedMemory}}}
 
   Instructions:
-  1.  The note should be personalized and reflect the shared experience.
+  1.  The note should be personalized and reflect the shared experience or occasion.
   2.  If the tool indicates it's appropriate, include a brief, lighthearted inside joke.
   3.  Keep the tone positive and appreciative.
   4.  The note should not exceed 150 words.
