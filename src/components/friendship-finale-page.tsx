@@ -13,7 +13,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { useToast } from '@/hooks/use-toast';
 import { generateNoteAction, customizeNoteAction, saveNoteAction } from '@/app/actions';
 import { Confetti } from '@/components/confetti';
-import { Heart, Loader2, Wand2, Copy, RefreshCw, Pencil, Send } from 'lucide-react';
+import { Heart, Loader2, Wand2, Copy, RefreshCw, Pencil, Send, Edit } from 'lucide-react';
 
 type Step = 'intro' | 'generate' | 'customize' | 'final';
 
@@ -31,6 +31,7 @@ export function FriendshipFinalePage() {
   const [note, setNote] = useState('');
   const [generationData, setGenerationData] = useState<GenerationValues | null>(null);
   const [personalTouches, setPersonalTouches] = useState('');
+  const [isEditingManually, setIsEditingManually] = useState(false);
   const [isPending, startTransition] = useTransition();
   const { toast } = useToast();
 
@@ -213,25 +214,44 @@ export function FriendshipFinalePage() {
     <Card className="w-full max-w-lg animate-in fade-in-50 duration-500">
       <CardHeader>
         <CardTitle className="font-headline text-3xl">Your Draft is Ready!</CardTitle>
-        <CardDescription className="font-body">Here's a start. Feel free to add your own personal touches below.</CardDescription>
+        <CardDescription className="font-body">Here's a start. Feel free to add your own personal touches below or edit the note directly.</CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">
-        <div className="p-4 bg-secondary rounded-lg border whitespace-pre-wrap font-body text-secondary-foreground">
-            {note}
-        </div>
-        <Textarea 
-            placeholder="Add a personal touch... e.g., 'And don't forget about the seagulls!'" 
-            className="min-h-[80px]" 
-            value={personalTouches}
-            onChange={(e) => setPersonalTouches(e.target.value)}
-        />
+        {isEditingManually ? (
+            <Textarea 
+                value={note}
+                onChange={(e) => setNote(e.target.value)}
+                className="min-h-[150px] font-body text-secondary-foreground"
+            />
+        ) : (
+            <div className="p-4 bg-secondary rounded-lg border whitespace-pre-wrap font-body text-secondary-foreground">
+                {note}
+            </div>
+        )}
+        
+        {!isEditingManually && (
+            <Textarea 
+                placeholder="Add a personal touch... e.g., 'And don't forget about the seagulls!'" 
+                className="min-h-[80px]" 
+                value={personalTouches}
+                onChange={(e) => setPersonalTouches(e.target.value)}
+            />
+        )}
       </CardContent>
-      <CardFooter className="flex flex-col sm:flex-row gap-2">
-        <Button onClick={handleCustomize} className="w-full sm:w-auto group" disabled={isPending || !personalTouches}>
-            {isPending ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Pencil className="mr-2 h-4 w-4 transition-transform group-hover:rotate-[-12deg]" />}
-            Make it More Personal
-        </Button>
-        <Button variant="outline" className="w-full sm:w-auto" onClick={() => setStep('final')} disabled={isPending}>
+      <CardFooter className="flex flex-col sm:flex-row gap-2 justify-between">
+          <div className="flex gap-2">
+            {!isEditingManually && (
+                <Button onClick={handleCustomize} className="w-full sm:w-auto group" disabled={isPending || !personalTouches}>
+                    {isPending ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Pencil className="mr-2 h-4 w-4 transition-transform group-hover:rotate-[-12deg]" />}
+                    Make it More Personal
+                </Button>
+            )}
+             <Button variant="outline" onClick={() => setIsEditingManually(!isEditingManually)}>
+                <Edit className="mr-2 h-4 w-4"/>
+                {isEditingManually ? 'Finish Editing' : 'Edit Manually'}
+             </Button>
+          </div>
+        <Button variant="secondary" className="w-full sm:w-auto" onClick={() => { setIsEditingManually(false); setStep('final');}} disabled={isPending}>
             It's Perfect!
         </Button>
       </CardFooter>
