@@ -18,6 +18,7 @@ const GenerateFriendshipNoteInputSchema = z.object({
   recipientName: z.string().describe('The name of the recipient.'),
   userName: z.string().describe('Your name.'),
   includeInsideJoke: z.boolean().describe('Whether to include an inside joke.'),
+  tone: z.string().describe('The desired tone of the note (e.g., Heartfelt, Funny, Casual).'),
 });
 export type GenerateFriendshipNoteInput = z.infer<typeof GenerateFriendshipNoteInputSchema>;
 
@@ -55,19 +56,22 @@ const prompt = ai.definePrompt({
   - Recipient Name: {{{recipientName}}}
   - Your Name: {{{userName}}}
   - Occasion/Memory: {{{sharedMemory}}}
+  - Desired Tone: {{{tone}}}
 
   Instructions:
   1.  The note should be personalized and reflect the shared experience or occasion.
-  2.  If the tool indicates it's appropriate, include a brief, lighthearted inside joke.
-  3.  Keep the tone positive and appreciative.
-  4.  The note should not exceed 150 words.
+  2.  Adapt the writing style to match the desired tone.
+  3.  Include relevant and tasteful emojis to enhance the message.
+  4.  If the tool indicates it's appropriate, include a brief, lighthearted inside joke.
+  5.  Keep the tone positive and appreciative.
+  6.  The note should not exceed 150 words.
   
   Example of inside joke integration:
   
   If shouldIncludeInsideJoke is true:
-  "Remember that time when we {{{sharedMemory}}}?  I still laugh about it, especially {{{insideJoke}}}."
+  "Remember that time when we {{{sharedMemory}}}?  I still laugh about it, especially {{{insideJoke}}}. 😂"
   If shouldIncludeInsideJoke is false:
-  "I will always remember when we {{{sharedMemory}}}."
+  "I will always remember when we {{{sharedMemory}}}. ❤️"
 `,
 });
 

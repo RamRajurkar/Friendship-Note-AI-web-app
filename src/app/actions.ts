@@ -11,6 +11,7 @@ const generateNoteSchema = z.object({
   recipientName: z.string().min(1, "Please enter your friend's name."),
   userName: z.string().min(1, 'Please enter your name.'),
   includeInsideJoke: z.boolean(),
+  tone: z.string(),
 });
 
 export async function generateNoteAction(values: z.infer<typeof generateNoteSchema>) {

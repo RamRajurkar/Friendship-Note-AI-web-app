@@ -10,6 +10,7 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage, FormDescription } from '@/components/ui/form';
 import { Checkbox } from '@/components/ui/checkbox';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useToast } from '@/hooks/use-toast';
 import { generateNoteAction, customizeNoteAction, saveNoteAction } from '@/app/actions';
 import { Confetti } from '@/components/confetti';
@@ -22,6 +23,7 @@ const generationSchema = z.object({
   userName: z.string().min(1, 'Please enter your name.'),
   sharedMemory: z.string().min(10, 'Please share a more detailed memory to make the note special.'),
   includeInsideJoke: z.boolean().default(false),
+  tone: z.string().min(1, 'Please select a tone for the note.'),
 });
 
 type GenerationValues = z.infer<typeof generationSchema>;
@@ -42,6 +44,7 @@ export function FriendshipFinalePage() {
       userName: '',
       sharedMemory: '',
       includeInsideJoke: false,
+      tone: 'Heartfelt',
     },
   });
 
@@ -181,20 +184,45 @@ export function FriendshipFinalePage() {
                 </FormItem>
               )}
             />
-            <FormField
-              control={form.control}
-              name="includeInsideJoke"
-              render={({ field }) => (
-                <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
-                  <FormControl>
-                    <Checkbox checked={field.value} onCheckedChange={field.onChange} />
-                  </FormControl>
-                  <div className="space-y-1 leading-none">
-                    <FormLabel>Include an inside joke?</FormLabel>
-                  </div>
-                </FormItem>
-              )}
-            />
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <FormField
+                control={form.control}
+                name="tone"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Tone of Voice</FormLabel>
+                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select a tone" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        <SelectItem value="Heartfelt">Heartfelt</SelectItem>
+                        <SelectItem value="Playful">Playful</SelectItem>
+                        <SelectItem value="Inspirational">Inspirational</SelectItem>
+                        <SelectItem value="Funny">Funny</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="includeInsideJoke"
+                render={({ field }) => (
+                  <FormItem className="flex flex-row items-end space-x-3 space-y-0 rounded-md border p-4">
+                    <FormControl>
+                      <Checkbox checked={field.value} onCheckedChange={field.onChange} />
+                    </FormControl>
+                    <div className="space-y-1 leading-none">
+                      <FormLabel>Include an inside joke?</FormLabel>
+                    </div>
+                  </FormItem>
+                )}
+              />
+            </div>
             <Button type="submit" className="w-full group" disabled={isPending}>
               {isPending ? (
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -209,8 +237,7 @@ export function FriendshipFinalePage() {
     </Card>
   );
   
-  const renderCustomize = () => {
-    return (
+  const renderCustomize = () => (
     <Card className="w-full max-w-lg animate-in fade-in-50 duration-500">
       <CardHeader>
         <CardTitle className="font-headline text-3xl">Your Draft is Ready!</CardTitle>
@@ -256,7 +283,7 @@ export function FriendshipFinalePage() {
         </Button>
       </CardFooter>
     </Card>
-  )};
+  );
   
   const renderFinal = () => (
     <>
@@ -307,3 +334,5 @@ export function FriendshipFinalePage() {
       return renderIntro();
   }
 }
+
+    
