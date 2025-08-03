@@ -22,7 +22,7 @@ This application helps you generate heartfelt, funny, or casual notes for any oc
 - **Styling:** [Tailwind CSS](https://tailwindcss.com/) with [ShadCN UI](https://ui.shadcn.com/)
 - **AI Integration:** [Google AI & Genkit](https://firebase.google.com/docs/genkit)
 - **Database:** [MongoDB Atlas](https://www.mongodb.com/atlas)
-- **Deployment:** [Firebase App Hosting](https://firebase.google.com/docs/app-hosting)
+
 
 ---
 
