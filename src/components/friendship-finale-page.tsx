@@ -34,6 +34,7 @@ export function FriendshipFinalePage() {
   const [generationData, setGenerationData] = useState<GenerationValues | null>(null);
   const [personalTouches, setPersonalTouches] = useState('');
   const [isEditingManually, setIsEditingManually] = useState(false);
+  const [shareLink, setShareLink] = useState('');
   const [isPending, startTransition] = useTransition();
   const { toast } = useToast();
 
@@ -82,24 +83,32 @@ export function FriendshipFinalePage() {
     });
   }
   
-  const handleCopyToClipboard = () => {
-    navigator.clipboard.writeText(note);
-    toast({
-        title: 'Note Copied!',
-        description: 'Your heartfelt note is ready to be pasted.',
+  const handleCopyToClipboard = (textToCopy: string) => {
+    navigator.clipboard.writeText(textToCopy).then(() => {
+        toast({
+            title: 'Copied!',
+            description: 'The content has been copied to your clipboard.',
+        });
+    }).catch(() => {
+        toast({
+            variant: 'destructive',
+            title: 'Copy Failed',
+            description: 'Could not copy to clipboard. Please copy it manually.',
+        });
     });
   }
   
   const handleShare = () => {
+    if (shareLink) {
+        handleCopyToClipboard(shareLink);
+        return;
+    }
     startTransition(async () => {
       const result = await saveNoteAction({note});
       if(result.success && result.noteId) {
-        const shareUrl = `${window.location.origin}/note/${result.noteId}`;
-        navigator.clipboard.writeText(shareUrl);
-        toast({
-            title: 'Link Copied!',
-            description: 'Your shareable note link is copied to the clipboard.',
-        });
+        const newShareUrl = `${window.location.origin}/note/${result.noteId}`;
+        setShareLink(newShareUrl);
+        handleCopyToClipboard(newShareUrl);
       } else {
          toast({
             variant: 'destructive',
@@ -114,6 +123,7 @@ export function FriendshipFinalePage() {
     setNote('');
     setPersonalTouches('');
     setGenerationData(null);
+    setShareLink('');
     form.reset();
     setStep('intro');
   }
@@ -299,17 +309,25 @@ export function FriendshipFinalePage() {
             </div>
           </CardContent>
           <CardFooter className="flex flex-col gap-4">
+             {shareLink && (
+                 <div className="flex w-full space-x-2">
+                    <Input value={shareLink} readOnly className="flex-1" />
+                    <Button variant="secondary" onClick={() => handleCopyToClipboard(shareLink)}>
+                        <Copy className="h-4 w-4" />
+                    </Button>
+                 </div>
+             )}
              <div className="flex flex-col sm:flex-row gap-2 w-full">
-                 <Button size="lg" className="flex-1 group" onClick={handleCopyToClipboard}>
-                    <Copy className="mr-2 h-5 w-5 transition-transform group-hover:scale-110"/> Copy to Clipboard
+                 <Button size="lg" className="flex-1 group" onClick={() => handleCopyToClipboard(note)}>
+                    <Copy className="mr-2 h-5 w-5 transition-transform group-hover:scale-110"/> Copy Note
                  </Button>
                  <Button size="lg" variant="accent" className="flex-1 group" onClick={handleShare} disabled={isPending}>
-                    {isPending ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Send className="mr-2 h-5 w-5 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1"/>}
-                     Share
+                    {isPending && !shareLink ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Send className="mr-2 h-5 w-5 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1"/>}
+                     {shareLink ? 'Copy Link' : 'Get Share Link'}
                  </Button>
              </div>
              <div className="flex gap-2">
-                 <Button variant="ghost" onClick={() => setStep('customize')}>
+                 <Button variant="ghost" onClick={() => { setShareLink(''); setStep('customize'); }}>
                     <Pencil className="mr-2 h-4 w-4" /> Edit
                  </Button>
                  <Button variant="ghost" onClick={handleStartOver}>
