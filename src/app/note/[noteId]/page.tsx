@@ -8,15 +8,15 @@ export default async function SharedNotePage({ params }: { params: { noteId: str
   const note = await getNote(params.noteId);
 
   return (
-    <div className="flex min-h-dvh w-full items-center justify-center bg-background p-4 font-body">
-      <Card className="w-full max-w-2xl text-center shadow-2xl">
+    <div className="flex min-h-dvh w-full items-center justify-center bg-gradient-to-br from-primary/20 via-background to-background p-4 font-body">
+      <Card className="w-full max-w-2xl text-center shadow-2xl bg-card/80 backdrop-blur-sm">
         <CardHeader>
           <CardTitle className="font-headline text-4xl tracking-wide">A Note For You</CardTitle>
           <CardDescription>Someone wanted to share this with you!</CardDescription>
         </CardHeader>
         <CardContent className="space-y-8">
           {note ? (
-            <div className="p-6 bg-secondary rounded-lg border whitespace-pre-wrap text-secondary-foreground text-lg leading-relaxed shadow-inner">
+            <div className="p-6 bg-secondary/70 rounded-lg border whitespace-pre-wrap text-secondary-foreground text-lg text-center leading-relaxed shadow-inner">
               {note}
             </div>
           ) : (
